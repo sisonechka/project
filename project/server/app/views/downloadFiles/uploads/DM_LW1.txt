@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct incid
+{
+	int point;
+	int edge;
+};
+
+int Contiguity_Matrix(int size, vector<vector<int>>& Сontig)
+{
+	cout << "Матрица смежности:" << endl;
+	cout << " |";
+	for (int i = 1; i <= size; i++)
+		cout << i << "|";
+	cout << endl;
+	for (int i = 0; i < size; i++)
+	{
+		cout << i + 1 << "|";
+		for (int j = 0; j < size; j++)
+		{
+			cout << Сontig[i][j] << "|";
+		}
+		cout << endl;
+	}
+
+	return 0;
+}
+
+int Incidence_Matrix(int size, vector<incid>& Incidents)
+{
+	cout << "Матрица инцендентности:" << endl;
+	cout << " |";
+	int V = 0;
+	for (int i = 0; i < Incidents.size(); i++)
+	{
+		cout << Incidents[i].point << "-" << Incidents[i].edge << "|";
+	}
+	cout << endl;
+	for (int i = 1; i <= size; i++)
+	{
+		cout << i << "|";
+		for (int j = 0; j < Incidents.size(); j++)
+		{
+			int temp = 0;
+			if (Incidents[j].point == i or Incidents[j].edge == i) temp += 1;
+			if (Incidents[j].point == i and Incidents[j].edge == i) temp += 1;
+			if (temp >= 0) cout << "  " << temp << "|"; else cout << "  " << temp << "|";
+		}
+		cout << endl;
+	}
+	return 0;
+}
+
+void main()
+{
+	setlocale(LC_ALL, "rus");
+	int size, one, two;
+
+	cout << "Введите количество точек (вершин) графов: ";
+	cin >> size;
+
+	vector<vector<int>> Сontig(size, vector<int>(size, 0));
+	vector<incid> Incidents;
+
+	cout << "Вводите ребра в формате с первая точека 'ПРОБЕЛ' вторая точека, когда завершите, введите 0 'ПРОБЕЛ' 0:" << endl;
+
+	while (cin >> one >> two, one != 0 or two != 0)
+	{
+		Сontig[one - 1][two - 1] += 1;
+		Сontig[two - 1][one - 1] += 1;
+
+		incid incid_temp;
+		incid_temp.point = one;
+		incid_temp.edge = two;
+		Incidents.push_back(incid_temp);
+	}
+
+	Contiguity_Matrix(size, Сontig);
+	Incidence_Matrix(size, Incidents);
+}
